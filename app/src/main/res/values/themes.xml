@@ -1,0 +1,26 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.CryptoXCleanArchitecture" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="android:statusBarColor">@color/blue</item>
+    </style>
+
+    <style name="Theme.CryptoXCleanArchitecture" parent="Base.Theme.CryptoXCleanArchitecture" />
+
+    <style name="TabLayoutTextStyle">
+        <item name="android:textStyle" >bold</item>
+        <item name="android:textSize" >16sp</item>
+        <item name="android:gravity" >center_horizontal</item>
+        <item name="android:textColor" >@color/white</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+    <style name="TabLayoutNewsTextStyle">
+        <item name="android:textStyle" >bold</item>
+        <item name="android:textSize" >16sp</item>
+        <item name="android:gravity" >center_horizontal</item>
+        <item name="android:textColor" >@color/white</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+</resources>

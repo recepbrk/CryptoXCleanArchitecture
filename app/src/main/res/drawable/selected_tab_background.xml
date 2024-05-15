@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Normal durumda arka plan -->
+    <item android:drawable="@color/blue" android:state_selected="false"/>
+
+    <!-- Seçili durumda arka plan -->
+    <item android:drawable="@color/gray" android:state_selected="true"/>
+</selector>
