@@ -1,11 +1,19 @@
 package com.recepguzel.cryptoxcleanarchitecture.ui.home.coinlist.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,6 +31,7 @@ class CoinListFragment : Fragment() {
     private lateinit var binding: FragmentCoinListBinding
     private val coinListViewModel: CoinListViewModel by viewModels()
     private lateinit var coinListAdapter: CoinListAdapter
+    private var allCoins: List<CryptoData> = listOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +50,51 @@ class CoinListFragment : Fragment() {
         }
         coinListViewModel.fetchCoins()
         initObserve()
+        searchCoins()
 
 
+
+
+
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun searchCoins() {
+        binding.searchEditText.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                val drawableRight = (v as EditText).compoundDrawables[2]
+                if (drawableRight != null && event.rawX >= (v.right - drawableRight.bounds.width())) {
+                    // Close iconuna tıklandığında metni sil
+                    (v as EditText).text = null
+                    return@setOnTouchListener true
+                }
+            }
+            false
+        }
+
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                filterCoins(s.toString())
+            }
+        })
+    }
+
+    private fun filterCoins(query: String?) {
+        val filteredList = if (query.isNullOrEmpty()) {
+            allCoins
+        } else {
+            allCoins.filter {
+                it.name.contains(query, ignoreCase = true) || it.symbol.contains(
+                    query,
+                    ignoreCase = true
+                )
+            }
+        }
+        coinListAdapter.differ.submitList(filteredList)
     }
 
     private fun initObserve() {
@@ -50,6 +102,7 @@ class CoinListFragment : Fragment() {
             when (response) {
                 is Resource.Success -> {
                     response.data?.let {
+                        allCoins = it
                         initAdapter(it)
                     }
                     binding.coinlistProgressBar.visibility = View.GONE

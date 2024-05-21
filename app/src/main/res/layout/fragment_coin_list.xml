@@ -9,6 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:background="@color/blue"
         android:layout_height="match_parent">
         <View
             android:layout_width="match_parent"
@@ -19,13 +20,27 @@
             android:id="@+id/coinlist_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/background_light"
+            android:layout_marginTop="50dp"
+            android:background="@color/blue"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             android:transitionGroup="true"
             tools:listitem="@layout/coinlist_item"
             android:scrollbars="vertical" />
+
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Search coins"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:drawableLeft="@drawable/search_icon"
+            android:drawablePadding="8dp"
+            android:drawableRight="@drawable/close_icon"
+            android:background="@drawable/edittext_background" />
 
         <ProgressBar
             android:id="@+id/coinlist_progressBar"
