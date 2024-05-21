@@ -28,4 +28,8 @@ class CoinRepositoryImpl @Inject constructor(
     override fun getFavoriteCoins(): LiveData<List<CryptoData>> {
         return coinLocaleDataSource.getCoinDataFromLocal()
     }
+
+    override suspend fun isCoinFavorite(coinName: String): Boolean {
+        return coinLocaleDataSource.isCoinFavorite(coinName)
+    }
 }

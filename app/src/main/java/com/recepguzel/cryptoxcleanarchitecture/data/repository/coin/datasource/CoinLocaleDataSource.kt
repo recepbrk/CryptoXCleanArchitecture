@@ -10,4 +10,5 @@ interface CoinLocaleDataSource {
     suspend fun deleteCoinDataToLocal(coin: CryptoData)
 
     fun getCoinDataFromLocal(): LiveData<List<CryptoData>>
+    suspend fun isCoinFavorite(coinName: String): Boolean
 }

@@ -64,7 +64,7 @@ data class CryptoData(
     val isAudited: Boolean,
     @ColumnInfo("badges")
     val badges: List<Int>,
-    val isFav: Boolean = false
+    var isFav: Boolean = false
 ) : Parcelable
 
 @Parcelize

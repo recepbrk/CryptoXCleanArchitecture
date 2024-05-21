@@ -1,5 +1,6 @@
 package com.recepguzel.cryptoxcleanarchitecture.ui.details
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -22,7 +24,7 @@ import java.text.DecimalFormat
 class CoinDetailFragment : Fragment() {
     private lateinit var binding: FragmentCoinDetailBinding
     private val args: CoinDetailFragmentArgs by navArgs()
-    private val coinListViewModel: CoinListViewModel by viewModels()
+    private val coinListViewModel: CoinListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +34,7 @@ class CoinDetailFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -100,27 +103,19 @@ class CoinDetailFragment : Fragment() {
 
                 favoriteIcon.setOnClickListener {
                     try {
+                        Log.d("CoinDetailFragment", "Saving coin to favorites: ${args.argDetails}")
+                        args.argDetails.isFav = true // Favori durumunu güncelle
                         coinListViewModel.saveCoin(args.argDetails)
-                        Toast.makeText(context, "Coin added to favorites.", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context, "Coin favorilere eklendi.", Toast.LENGTH_SHORT).show()
 
-                        // Favoriye eklenen coin'in durumunu kontrol etmek
-                        val isFav = args.argDetails.isFav
-                        // Coin favorilere eklenmediyse ve favorilere eklenmişse, görünümü güncelle
-                        if (!args.fromFavorites && isFav) {
-                            binding.favoriteIcon.setImageResource(R.drawable.star_fill)
-                        }
+                        // Favori ikonu güncelle
+                        binding.favoriteIcon.setImageResource(R.drawable.star_fill)
                     } catch (e: Exception) {
-                        // Favoriye ekleme işlemi sırasında hata oluşursa hatayı yazdır
-                        e.printStackTrace()
-                        // Kullanıcıya hata mesajını göster
-                        Toast.makeText(
-                            context,
-                            "An error occurred while adding coin to favorites.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Log.e("CoinDetailFragment", "Error adding coin to favorites", e)
+                        Toast.makeText(context, "Coin favorilere eklenemedi.", Toast.LENGTH_SHORT).show()
                     }
                 }
+
             }
         }
     }

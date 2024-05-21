@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentHomeBinding
 import com.recepguzel.cryptoxcleanarchitecture.ui.home.coinlist.fragment.CoinListFragment
-import com.recepguzel.cryptoxcleanarchitecture.ui.home.favorite.FavoriteFragment
+import com.recepguzel.cryptoxcleanarchitecture.ui.home.favorite.fragment.FavoriteFragment
 
 
 class HomeFragment : Fragment() {

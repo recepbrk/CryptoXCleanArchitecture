@@ -8,10 +8,7 @@ import javax.inject.Inject
 
 class GetCoinsUseCase @Inject constructor(private val coinRepository: CoinRepository) {
 
-    // Get Favorite Coins Use Case
-    fun getFavoriteCoins(): LiveData<List<CryptoData>> {
-        return coinRepository.getFavoriteCoins()
-    }
+
 
     // Get Coins Use Case
     suspend fun getCoins(): Resource<List<CryptoData>> {

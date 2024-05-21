@@ -15,7 +15,7 @@ class CoinListViewModel @Inject constructor(
     private val getCoinsUseCase: GetCoinsUseCase
 ) : ViewModel() {
 
-    val favoriteCoins: LiveData<List<CryptoData>> = getCoinsUseCase.getFavoriteCoins()
+
 
     fun fetchCoins() = liveData {
         val result = getCoinsUseCase.getCoins()
@@ -26,7 +26,4 @@ class CoinListViewModel @Inject constructor(
         getCoinsUseCase.saveCoin(coin)
     }
 
-    fun deleteCoin(coin: CryptoData) = viewModelScope.launch {
-        getCoinsUseCase.deleteCoin(coin)
-    }
 }

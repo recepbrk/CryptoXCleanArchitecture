@@ -9,4 +9,5 @@ interface CoinRepository {
     suspend fun saveCoin(coin: CryptoData): Long
     suspend fun deleteCoin(coin: CryptoData)
     fun getFavoriteCoins(): LiveData<List<CryptoData>>
+    suspend fun isCoinFavorite(coinName: String): Boolean
 }

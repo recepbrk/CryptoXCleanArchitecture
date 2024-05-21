@@ -19,6 +19,6 @@ interface CoinFavoriteDao {
     @Query("SELECT*FROM favorite_table")
     fun getFavoriteList(): LiveData<List<CryptoData>>
 
-    @Query("SELECT name FROM favorite_table")
-    fun getCoinTitles(): List<String>
+    @Query("SELECT COUNT(*) FROM favorite_table WHERE name = :coinName")
+    suspend fun isCoinFavorite(coinName: String): Int
 }

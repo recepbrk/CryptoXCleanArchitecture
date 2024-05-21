@@ -11,7 +11,10 @@ import javax.inject.Inject
         CoinLocaleDataSource {
 
         override suspend fun saveCoinDataToLocal(coin: CryptoData): Long {
-            return coinFavoriteDao.addCoin(coin)
+            return if (!isCoinFavorite(coin.name)) {
+                coinFavoriteDao.addCoin(coin)
+            } else
+                -1
         }
 
         override suspend fun deleteCoinDataToLocal(coin: CryptoData) {
@@ -20,5 +23,9 @@ import javax.inject.Inject
 
         override fun getCoinDataFromLocal(): LiveData<List<CryptoData>> {
             return coinFavoriteDao.getFavoriteList()
+        }
+
+        override suspend fun isCoinFavorite(coinName: String): Boolean {
+            return coinFavoriteDao.isCoinFavorite(coinName) > 0
         }
     }
