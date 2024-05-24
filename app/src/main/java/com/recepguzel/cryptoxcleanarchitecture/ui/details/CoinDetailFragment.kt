@@ -11,7 +11,6 @@ import android.webkit.WebSettings
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -60,7 +59,7 @@ class CoinDetailFragment : Fragment() {
                 if (percentChange24Hours >= 0.0) {
                     Log.d("changecolor", "Yeşil renk seçildi.")
                     coinDetails24hours.setTextColor(Color.parseColor("#25cf86"))
-                    coinArrowImage.setImageResource(R.drawable.arrow_up)
+                    coinArrowImage.setImageResource(R.drawable.ic_arrow_up)
                     coinDetails24hours.text =
                         percentChange24HoursFormat.format(args.argDetails.quotes.firstOrNull()?.percentChange24Hours)
 

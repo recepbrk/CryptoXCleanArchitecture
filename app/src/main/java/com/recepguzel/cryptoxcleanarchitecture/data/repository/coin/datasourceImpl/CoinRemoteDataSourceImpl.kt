@@ -12,9 +12,8 @@ class CoinRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getCoinFromRemote(): Resource<List<CryptoData>> {
         return try {
-            // Assuming start and limit values, you might want to make these parameters or constants
             val start = 1
-            val limit = 100
+            val limit = 200
             val response = coinNetworkService.getCoinList(start, limit)
 
             // Convert CoinResponse to Resource<List<CryptoData>>

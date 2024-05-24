@@ -5,6 +5,7 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -99,4 +100,9 @@ dependencies {
     //Image Loading
     implementation("com.github.bumptech.glide:glide:4.14.2")
     kapt("com.github.bumptech.glide:compiler:4.14.2")
+
+    //Firebase
+    implementation ("com.google.firebase:firebase-firestore:24.0.0")
+    implementation ("com.google.firebase:firebase-core:20.0.0")
+
 }

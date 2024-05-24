@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/dictionaryFragment"
-        android:name="com.recepguzel.cryptoxcleanarchitecture.ui.dictionary.DictionaryFragment"
+        android:name="com.recepguzel.cryptoxcleanarchitecture.ui.dictionary.fragment.DictionaryFragment"
         android:label="fragment_dictionary"
         tools:layout="@layout/fragment_dictionary" />
     <fragment

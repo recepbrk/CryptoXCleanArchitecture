@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "663819044519",
+    "firebase_url": "https://cryptoxcleanarch-default-rtdb.firebaseio.com",
+    "project_id": "cryptoxcleanarch",
+    "storage_bucket": "cryptoxcleanarch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663819044519:android:b66a75dfef6b966e993d82",
+        "android_client_info": {
+          "package_name": "com.recepguzel.cryptoxcleanarchitecture"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9VeOK4860jJkFg8lbFvp2wrXcIgzIpuk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
