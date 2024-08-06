@@ -19,4 +19,5 @@ class LocaleDataSourceModule {
     fun provideCoinLocaleDataSource(coinFavoriteDao: CoinFavoriteDao): CoinLocaleDataSource {
         return CoinLocaleDataSourceImpl(coinFavoriteDao)
     }
+
 }

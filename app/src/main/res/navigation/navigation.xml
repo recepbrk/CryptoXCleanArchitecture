@@ -23,7 +23,9 @@
         android:id="@+id/newsFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.news.NewsFragment"
         android:label="fragment_news"
-        tools:layout="@layout/fragment_news" />
+        tools:layout="@layout/fragment_news" >
+
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.profile.ProfileFragment"
@@ -42,4 +44,8 @@
             app:argType="boolean"
             android:defaultValue="false" />
     </fragment>
+    <fragment
+        android:id="@+id/newsCategoryFragment"
+        android:name="com.recepguzel.cryptoxcleanarchitecture.ui.category.NewsCategoryFragment"
+        android:label="NewsCategoryFragment" />
 </navigation>

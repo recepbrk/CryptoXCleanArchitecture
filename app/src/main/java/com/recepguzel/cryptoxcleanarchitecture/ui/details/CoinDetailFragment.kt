@@ -105,13 +105,15 @@ class CoinDetailFragment : Fragment() {
                         Log.d("CoinDetailFragment", "Saving coin to favorites: ${args.argDetails}")
                         args.argDetails.isFav = true // Favori durumunu güncelle
                         coinListViewModel.saveCoin(args.argDetails)
-                        Toast.makeText(context, "Coin favorilere eklendi.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Coin favorilere eklendi.", Toast.LENGTH_SHORT)
+                            .show()
 
                         // Favori ikonu güncelle
                         binding.favoriteIcon.setImageResource(R.drawable.star_fill)
                     } catch (e: Exception) {
                         Log.e("CoinDetailFragment", "Error adding coin to favorites", e)
-                        Toast.makeText(context, "Coin favorilere eklenemedi.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Coin favorilere eklenemedi.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
 

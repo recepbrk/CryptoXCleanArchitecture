@@ -26,7 +26,7 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       binding=FragmentFavoriteBinding.inflate(inflater,container,false)
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -36,6 +36,7 @@ class FavoriteFragment : Fragment() {
         observeData()
         deleteFavoriteCoin()
     }
+
     private fun createRecyclerView() {
         favoriteAdapter = FavoriteAdapter()
         binding.favoriteRecyclerView.adapter = favoriteAdapter

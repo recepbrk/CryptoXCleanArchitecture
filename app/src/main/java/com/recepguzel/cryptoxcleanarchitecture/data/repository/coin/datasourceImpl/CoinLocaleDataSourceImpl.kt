@@ -7,25 +7,25 @@ import com.recepguzel.cryptoxcleanarchitecture.data.source.locale.CoinFavoriteDa
 import javax.inject.Inject
 
 
-    class CoinLocaleDataSourceImpl @Inject constructor(private val coinFavoriteDao: CoinFavoriteDao) :
-        CoinLocaleDataSource {
+class CoinLocaleDataSourceImpl @Inject constructor(private val coinFavoriteDao: CoinFavoriteDao) :
+    CoinLocaleDataSource {
 
-        override suspend fun saveCoinDataToLocal(coin: CryptoData): Long {
-            return if (!isCoinFavorite(coin.name)) {
-                coinFavoriteDao.addCoin(coin)
-            } else
-                -1
-        }
-
-        override suspend fun deleteCoinDataToLocal(coin: CryptoData) {
-            coinFavoriteDao.deleteCoin(coin)
-        }
-
-        override fun getCoinDataFromLocal(): LiveData<List<CryptoData>> {
-            return coinFavoriteDao.getFavoriteList()
-        }
-
-        override suspend fun isCoinFavorite(coinName: String): Boolean {
-            return coinFavoriteDao.isCoinFavorite(coinName) > 0
-        }
+    override suspend fun saveCoinDataToLocal(coin: CryptoData): Long {
+        return if (!isCoinFavorite(coin.name)) {
+            coinFavoriteDao.addCoin(coin)
+        } else
+            -1
     }
+
+    override suspend fun deleteCoinDataToLocal(coin: CryptoData) {
+        coinFavoriteDao.deleteCoin(coin)
+    }
+
+    override fun getCoinDataFromLocal(): LiveData<List<CryptoData>> {
+        return coinFavoriteDao.getFavoriteList()
+    }
+
+    override suspend fun isCoinFavorite(coinName: String): Boolean {
+        return coinFavoriteDao.isCoinFavorite(coinName) > 0
+    }
+}

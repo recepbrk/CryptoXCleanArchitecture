@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.recepguzel.cryptoxcleanarchitecture.data.model.CryptoData
+
 @Dao
 interface CoinFavoriteDao {
 

@@ -1,6 +1,5 @@
 package com.recepguzel.cryptoxcleanarchitecture.ui.home.coinlist.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
@@ -14,7 +13,6 @@ import javax.inject.Inject
 class CoinListViewModel @Inject constructor(
     private val getCoinsUseCase: GetCoinsUseCase
 ) : ViewModel() {
-
 
 
     fun fetchCoins() = liveData {

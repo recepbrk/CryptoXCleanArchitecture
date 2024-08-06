@@ -10,10 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.SearchView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -51,9 +48,6 @@ class CoinListFragment : Fragment() {
         coinListViewModel.fetchCoins()
         initObserve()
         searchCoins()
-
-
-
 
 
     }
@@ -108,9 +102,9 @@ class CoinListFragment : Fragment() {
                     binding.coinlistProgressBar.visibility = View.GONE
                     binding.swipeRefreshLayout.isRefreshing = false
                     coinListAdapter.setOnItemClickListener {
-                          val action =
-                           HomeFragmentDirections.actionHomeFragmentToCoinDetailFragment(it)
-                           findNavController().navigate(action)
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToCoinDetailFragment(it)
+                        findNavController().navigate(action)
                     }
                 }
 

@@ -22,8 +22,9 @@ class DictionaryAdapter : RecyclerView.Adapter<DictionaryAdapter.DictionaryViewH
 
     val differ = AsyncListDiffer<CryptoTerm>(this, differCallBack)
 
-    inner class DictionaryViewHolder(private val binding: DictionaryItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        private var isExpanded = false // Durumu izlemek için bir değişken
+    inner class DictionaryViewHolder(private val binding: DictionaryItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        private var isExpanded = false
 
         fun bind(dictionary: CryptoTerm) {
             binding.apply {

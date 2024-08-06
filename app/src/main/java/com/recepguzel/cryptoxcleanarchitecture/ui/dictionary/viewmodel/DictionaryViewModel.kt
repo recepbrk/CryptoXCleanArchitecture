@@ -1,7 +1,6 @@
 package com.recepguzel.cryptoxcleanarchitecture.ui.dictionary.viewmodel
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,7 +30,7 @@ class DictionaryViewModel @Inject constructor() : ViewModel() {
                 }
                 _cryptoTermList.value = terms
             }
-            .addOnFailureListener{exception->
+            .addOnFailureListener { exception ->
                 Log.e("DictionaryFragment", "Verileri yüklerken hata oluştu: $exception")
             }
     }

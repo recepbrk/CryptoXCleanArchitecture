@@ -13,7 +13,7 @@ class FavoriteViewModel @Inject constructor(private val coinRepository: CoinRepo
     ViewModel() {
 
     fun addFavoriteCoin(coin: CryptoData) = viewModelScope.launch {
-        if (!coinRepository.isCoinFavorite(coin.name)){
+        if (!coinRepository.isCoinFavorite(coin.name)) {
             coinRepository.saveCoin(coin)
         }
     }

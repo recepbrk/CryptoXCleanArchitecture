@@ -1,13 +1,11 @@
 package com.recepguzel.cryptoxcleanarchitecture.domain.usecase
 
-import androidx.lifecycle.LiveData
 import com.recepguzel.cryptoxcleanarchitecture.data.model.CryptoData
 import com.recepguzel.cryptoxcleanarchitecture.domain.repository.CoinRepository
 import com.recepguzel.cryptoxcleanarchitecture.util.resource.Resource
 import javax.inject.Inject
 
 class GetCoinsUseCase @Inject constructor(private val coinRepository: CoinRepository) {
-
 
 
     // Get Coins Use Case

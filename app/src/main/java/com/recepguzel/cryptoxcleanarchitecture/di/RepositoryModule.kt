@@ -1,25 +1,28 @@
 package com.recepguzel.cryptoxcleanarchitecture.di
 
 import com.recepguzel.cryptoxcleanarchitecture.data.repository.coin.CoinRepositoryImpl
-import com.recepguzel.cryptoxcleanarchitecture.data.repository.coin.datasource.CoinLocaleDataSource
-import com.recepguzel.cryptoxcleanarchitecture.data.repository.coin.datasource.CoinRemoteDataSource
+import com.recepguzel.cryptoxcleanarchitecture.data.repository.news.NewsRepositoryImpl
 import com.recepguzel.cryptoxcleanarchitecture.domain.repository.CoinRepository
+import com.recepguzel.cryptoxcleanarchitecture.domain.repository.NewsRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RepositoryModule {
+abstract class RepositoryModule {
 
+    @Binds
     @Singleton
-    @Provides
-    fun provideCoinRepository(
-        coinRemoteDataSource: CoinRemoteDataSource,
-        coinLocaleDataSource: CoinLocaleDataSource
-    ): CoinRepository {
-        return CoinRepositoryImpl(coinRemoteDataSource, coinLocaleDataSource)
-    }
+    abstract fun bindCoinRepository(
+        coinRepositoryImpl: CoinRepositoryImpl
+    ): CoinRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindNewsRepository(
+        newsRepositoryImpl: NewsRepositoryImpl
+    ): NewsRepository
 }
