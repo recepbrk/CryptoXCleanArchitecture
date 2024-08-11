@@ -1,4 +1,4 @@
-package com.recepguzel.cryptoxcleanarchitecture.ui.news
+package com.recepguzel.cryptoxcleanarchitecture.ui.news.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
