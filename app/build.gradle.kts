@@ -105,4 +105,5 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore:24.0.0")
     implementation ("com.google.firebase:firebase-core:20.0.0")
 
+
 }

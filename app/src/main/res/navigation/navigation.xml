@@ -59,18 +59,11 @@
         android:name="com.recepguzel.cryptoxcleanarchitecture.MainActivity"
         android:label="fragment_dictionary"
         tools:layout="@layout/fragment_dictionary" />
-    <argument
-        android:name="categoory"
-        app:argType="string"
-        android:defaultValue="NFT" />
+
     <fragment
         android:id="@+id/newsCategoryFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.news.NewsCategoryFragment"
-        android:label="NewsCategoryFragment" >
-        <action
-            android:id="@+id/action_newsCategoryFragment_to_newsFragment"
-            app:destination="@id/newsFragment" />
-    </fragment>
+        android:label="NewsCategoryFragment" />
     <fragment
         android:id="@+id/newsFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.news.fragment.NewsFragment"
@@ -79,9 +72,6 @@
         <action
             android:id="@+id/action_newsFragment_to_newsDetailFragment"
             app:destination="@id/newsDetailFragment" />
-        <argument
-            android:name="category"
-            app:argType="string"
-            android:defaultValue="Nft" />
+
     </fragment>
 </navigation>
