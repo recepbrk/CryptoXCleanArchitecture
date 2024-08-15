@@ -22,7 +22,7 @@ class NewsFragment : Fragment() {
     private lateinit var binding: FragmentNewsBinding
     private val newsViewModel: NewsViewModel by viewModels()
     private lateinit var newsAdapter: NewsAdapter
-    private val args: NewsFragmentArgs by navArgs() // SafeArgs kullanarak argümanları almak
+    private var category: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,12 +37,16 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("NewsFragment", "onViewCreated: View created")
 
+
+            category = arguments?.getString("category")
+            Log.d("NewsFragment", "onCreate: Category received: $category")
+
         setupRecyclerView()
         observeData()
 
-        val category = args.category // SafeArgs ile gelen kategori verisini al
+
         Log.d("NewsFragment", "onViewCreated: Fetching news for category: $category")
-        newsViewModel.getCryptoNews(category)
+        category?.let { newsViewModel.getCryptoNews(it) }
     }
 
     private fun setupRecyclerView() {
