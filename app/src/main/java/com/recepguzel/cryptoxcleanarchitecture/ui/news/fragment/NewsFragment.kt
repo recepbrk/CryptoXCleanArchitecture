@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentNewsBinding
 import com.recepguzel.cryptoxcleanarchitecture.ui.news.adapter.NewsAdapter
 import com.recepguzel.cryptoxcleanarchitecture.ui.news.viewmodel.NewsViewModel
@@ -33,20 +32,29 @@ class NewsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            category = it.getString("category")
+            Log.d("NewsFragment", "onViewCreated: Category received: $category")
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("NewsFragment", "onViewCreated: View created")
 
+        arguments?.let {
+            category = it.getString("category")
+            Log.d("NewsFragment", "onViewCreated: Category received: $category")
 
-            category = arguments?.getString("category")
-            Log.d("NewsFragment", "onCreate: Category received: $category")
+            setupRecyclerView()
+            observeData()
 
-        setupRecyclerView()
-        observeData()
-
-
-        Log.d("NewsFragment", "onViewCreated: Fetching news for category: $category")
-        category?.let { newsViewModel.getCryptoNews(it) }
+            category?.let { category ->
+                newsViewModel.getCryptoNews(category)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -65,7 +73,8 @@ class NewsFragment : Fragment() {
 
                     newsAdapter.OnItemClickListener { article ->
                         Log.d("NewsFragment", "observeData: Item clicked - Navigating to details")
-                        val action = NewsFragmentDirections.actionNewsFragmentToNewsDetailFragment(article)
+                        val action =
+                            NewsFragmentDirections.actionNewsFragmentToNewsDetailFragment(article)
                         findNavController().navigate(action)
                     }
                 }
