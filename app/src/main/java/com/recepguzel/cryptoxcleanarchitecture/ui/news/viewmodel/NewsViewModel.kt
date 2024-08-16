@@ -1,5 +1,6 @@
 package com.recepguzel.cryptoxcleanarchitecture.ui.news.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,7 @@ class NewsViewModel @Inject constructor(
     fun getCryptoNews(searchQuery: String) = viewModelScope.launch {
         _searchNews.value = Resource.Loading()
         try {
+            Log.d("NewsViewModel", "getCryptoNews: Fetching news for query: $searchQuery")
             val newsResponse = getNewsUseCase(searchQuery, 1)
             if (newsResponse != null) {
                 _searchNews.value = Resource.Success(newsResponse)

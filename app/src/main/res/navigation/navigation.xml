@@ -63,12 +63,20 @@
     <fragment
         android:id="@+id/newsCategoryFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.news.NewsCategoryFragment"
-        android:label="NewsCategoryFragment" />
+        android:label="NewsCategoryFragment" >
+        <action
+            android:id="@+id/action_newsCategoryFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/newsFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.news.fragment.NewsFragment"
         tools:layout="@layout/fragment_news"
         android:label="NewsFragment" >
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue="Bitcoin" />
         <action
             android:id="@+id/action_newsFragment_to_newsDetailFragment"
             app:destination="@id/newsDetailFragment" />
