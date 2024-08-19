@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentNewsBinding
 import com.recepguzel.cryptoxcleanarchitecture.ui.news.adapter.NewsAdapter
 import com.recepguzel.cryptoxcleanarchitecture.ui.news.viewmodel.NewsViewModel
@@ -21,39 +22,33 @@ class NewsFragment : Fragment() {
     private lateinit var binding: FragmentNewsBinding
     private val newsViewModel: NewsViewModel by viewModels()
     private lateinit var newsAdapter: NewsAdapter
-    private var category: String? = null
+
+    // SafeArgs to receive the category argument
+    private val args: NewsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d("NewsFragment", "onCreateView: Inflating FragmentNewsBinding")
         binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            category = it.getString("category")
-            Log.d("NewsFragment", "onViewCreated: Category received: $category")
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("NewsFragment", "onViewCreated: View created")
 
-        arguments?.let {
-            category = it.getString("category")
-            Log.d("NewsFragment", "onViewCreated: Category received: $category")
+        val veri = arguments?.getString("name")
+        Log.d("NewsFragment", "name = $veri")
 
-            setupRecyclerView()
-            observeData()
+        val category = args.category // Get the category from SafeArgs
+        Log.d("NewsFragment", "onViewCreated: Category received: $category")
 
-            category?.let { category ->
-                newsViewModel.getCryptoNews(category)
-            }
+        setupRecyclerView()
+        observeData()
+
+        category?.let {
+            newsViewModel.getCryptoNews(it)
         }
     }
 
