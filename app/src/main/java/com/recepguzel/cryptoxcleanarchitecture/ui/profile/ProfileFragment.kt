@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -22,7 +20,6 @@ import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentProfileBindin
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.InputStream
 
 class ProfileFragment : Fragment() {
 
@@ -49,7 +46,11 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: Fragment görünümleri oluşturuldu")
 
-        // Kaydedilen resmi yükleyin
+        binding.cardLogOut.setOnClickListener {
+            showLogoutDialog()
+        }
+
+
         loadImageFromSharedPreferences()
 
         // İzin talebi sonuçlarını dinlemek için launcher tanımlama
@@ -147,18 +148,45 @@ class ProfileFragment : Fragment() {
 
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Depolama İzni Gerekli")
-            .setMessage("Depolama izni verilmediği için galeriden resim seçemezsiniz. Lütfen izni ayarlardan manuel olarak verin.")
+            .setTitle("Storage Permission Required")
+            .setMessage("You cannot select images from the gallery as storage permission is not granted. Please grant permission manually from settings.")
             .setPositiveButton("Tamam") { dialog, _ ->
                 dialog.dismiss()
             }
             .setNegativeButton("Ayarlar") { dialog, _ ->
                 dialog.dismiss()
-                val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", requireContext().packageName, null)
-                }
+                val intent =
+                    Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", requireContext().packageName, null)
+                    }
                 startActivity(intent)
             }
             .show()
     }
+
+    private fun showLogoutDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Log Out ?")
+        builder.setMessage("Are you sure you want to log out?")
+
+
+        builder.setPositiveButton("Yes") { dialog, _ ->
+            dialog.dismiss()
+            logout()
+        }
+
+
+        builder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+
+        builder.show()
+    }
+
+    private fun logout() {
+
+        requireActivity().finish()
+    }
 }
+
