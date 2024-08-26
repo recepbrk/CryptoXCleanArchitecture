@@ -45,6 +45,7 @@ class CoinListFragment : Fragment() {
             coinListViewModel.fetchCoins()
             initObserve()
         }
+        coinListAdapter = CoinListAdapter()
         coinListViewModel.fetchCoins()
         initObserve()
         searchCoins()

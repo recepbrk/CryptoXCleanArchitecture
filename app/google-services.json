@@ -13,7 +13,20 @@
           "package_name": "com.recepguzel.cryptoxcleanarchitecture"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "663819044519-cg2g809u2tp0ah6k2i0ahsbm82dmfldl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.recepguzel.cryptoxcleanarchitecture",
+            "certificate_hash": "84f8a5ae74782e537dd60f03a448343b5b13a180"
+          }
+        },
+        {
+          "client_id": "663819044519-bseimtmkat0q13rcg0v4vntrn2bvt5ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD9VeOK4860jJkFg8lbFvp2wrXcIgzIpuk"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663819044519-bseimtmkat0q13rcg0v4vntrn2bvt5ta.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

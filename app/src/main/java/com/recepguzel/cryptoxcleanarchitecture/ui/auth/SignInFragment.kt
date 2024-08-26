@@ -3,10 +3,11 @@ package com.recepguzel.cryptoxcleanarchitecture.ui.auth
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,10 +18,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-
 import com.recepguzel.cryptoxcleanarchitecture.R
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentSignInBinding
 
@@ -29,13 +28,14 @@ class SignInFragment : Fragment() {
     private lateinit var binding: FragmentSignInBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var diolog: BottomSheetDialog
+    private var isPasswordVisible = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding= FragmentSignInBinding.inflate(inflater,container,false)
+        binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,6 +43,64 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         loginOperation()
         googleAuth()
+        passwordVisible()
+        forgotPassword()
+    }
+
+    private fun forgotPassword() {
+        binding.signInForgotPassword.setOnClickListener {
+            findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToForgotPasswordFragment())
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun passwordVisible() {
+        binding.signInPassword.setOnTouchListener { _, event ->
+            val drawableEnd = 2 // drawableEnd için indeks
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX >= (binding.signInPassword.right - binding.signInPassword.compoundDrawables[drawableEnd].bounds.width())) {
+                    togglePasswordVisibility(binding.signInPassword)
+                    return@setOnTouchListener true
+                }
+            }
+            false
+        }
+    }
+
+    private fun togglePasswordVisibility(editText: EditText) {
+        val typeface = editText.typeface
+        val textSize = editText.textSize
+
+        if (isPasswordVisible) {
+            // Şifreyi gizle
+            editText.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            editText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                0,
+                0,
+                R.drawable.password_visibility,
+                0
+            )
+        } else {
+            // Şifreyi göster
+            editText.inputType =
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            editText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                0,
+                0,
+                R.drawable.show_password,
+                0
+            )
+        }
+
+        // Yazı tipini ve boyutunu tekrar uygula
+        editText.typeface = typeface
+        editText.textSize = textSize / resources.displayMetrics.scaledDensity
+
+        // İmleci sona taşı
+        editText.setSelection(editText.text?.length ?: 0)
+        isPasswordVisible = !isPasswordVisible
+
     }
 
     private fun googleAuth() {
@@ -96,24 +154,6 @@ class SignInFragment : Fragment() {
 
             }
         }
-    }
-
-
-
-    private fun sendPasswordResetEmail(email: String) {
-        val auth = FirebaseAuth.getInstance()
-
-        auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(context, "Şifre sıfırlama isteği gönderildi", Toast.LENGTH_SHORT)
-                        .show()
-                    diolog.dismiss()
-                } else {
-                    Toast.makeText(context, "Hata: ${task.exception?.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
     }
 
 

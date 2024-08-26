@@ -16,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentProfileBinding
 import java.io.File
 import java.io.FileOutputStream
@@ -26,6 +28,7 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
+    private val args: ProfileFragmentArgs by navArgs()
 
     companion object {
         private const val TAG = "ProfileFragment"
@@ -46,9 +49,15 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: Fragment görünümleri oluşturuldu")
 
+
+        binding.cardViewResetPassword.setOnClickListener {
+            val action=ProfileFragmentDirections.actionProfileFragmentToForgotPasswordFragment()
+            findNavController().navigate(action)
+        }
         binding.cardLogOut.setOnClickListener {
             showLogoutDialog()
         }
+        binding.userName.text = args.name
 
 
         loadImageFromSharedPreferences()

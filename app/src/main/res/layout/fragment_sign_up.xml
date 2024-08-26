@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/background"
+    android:gravity="center"
+    tools:context=".ui.auth.SignUpFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Welcome to Crypto "
+        android:textColor="#E8EAE9"
+        android:textSize="25sp"
+        android:layout_marginTop="-30dp"
+        android:layout_marginEnd="55dp"
+        android:textStyle="normal"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="X"
+        android:layout_marginTop="-58dp"
+        android:layout_marginStart="70dp"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="name"
+        android:background="@drawable/custom_edittext"
+        android:completionHint="Olası isimler"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="Name"
+        android:layout_marginTop="170dp"
+        android:importantForAutofill="yes"
+        android:inputType="text"
+        android:padding="12dp"
+        android:singleLine="true"
+        android:textColor="#333333"
+        android:textColorHint="#888888"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="emailAddress"
+        android:background="@drawable/custom_edittext"
+        android:completionHint="Olası e-posta adresleri"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="Email"
+        android:importantForAutofill="yes"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:singleLine="true"
+        android:textColor="#333333"
+        android:textColorHint="#888888"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextPassword1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="newPassword"
+        android:background="@drawable/custom_edittext"
+        android:completionHint="Yeni şifre"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="Enter Password"
+        android:drawableEnd="@drawable/password_visibility"
+        android:importantForAutofill="yes"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:singleLine="true"
+        android:textColor="#333333"
+        android:textColorHint="#888888"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextPassword2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="newPassword"
+        android:background="@drawable/custom_edittext"
+        android:completionHint="Şifreyi tekrar girin"
+        android:drawablePadding="10dp"
+        android:drawableEnd="@drawable/password_visibility"
+        android:fontFamily="@font/poppins_medium"
+        android:hint="Enter Your Password Again"
+        android:importantForAutofill="yes"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:singleLine="true"
+        android:textColor="#333333"
+        android:textColorHint="#888888"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button_background"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Sign up"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:layout_marginBottom="20dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/button_background_google"
+        android:drawableStart="@drawable/google"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:padding="8dp"
+        android:paddingStart="80dp"
+        android:paddingEnd="80dp"
+        android:text="Sign up with Google"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/poppins_medium"
+        android:layout_marginEnd="30dp"
+        android:text="Already have an account?"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/loginTextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Login"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="-30dp"
+        android:textColor="#3139ff"
+        android:textSize="15sp"
+       />
+</LinearLayout>

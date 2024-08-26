@@ -23,7 +23,15 @@
         android:id="@+id/profileFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="name"
+            android:defaultValue="Welcome to CryptoX"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_profileFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+    </fragment>
     <fragment
         android:id="@+id/coinDetailFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.details.CoinDetailFragment"
@@ -85,19 +93,22 @@
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.auth.SignInFragment"
-        android:label="SignInFragment" >
+        android:label="SignInFragment">
         <action
             android:id="@+id/action_signInFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.auth.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
@@ -105,4 +116,9 @@
             android:id="@+id/action_signUpFragment_to_homeFragment2"
             app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.recepguzel.cryptoxcleanarchitecture.ui.auth.ForgotPasswordFragment"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" />
 </navigation>
