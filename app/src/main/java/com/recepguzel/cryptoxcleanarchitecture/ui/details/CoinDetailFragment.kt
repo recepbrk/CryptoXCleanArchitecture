@@ -14,6 +14,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.recepguzel.cryptoxcleanarchitecture.R
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentCoinDetailBinding
 import com.recepguzel.cryptoxcleanarchitecture.ui.home.coinlist.viewmodel.CoinListViewModel
@@ -24,6 +29,7 @@ class CoinDetailFragment : Fragment() {
     private lateinit var binding: FragmentCoinDetailBinding
     private val args: CoinDetailFragmentArgs by navArgs()
     private val coinListViewModel: CoinListViewModel by activityViewModels()
+    lateinit var adView: AdView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +44,14 @@ class CoinDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         backButton()
+        loadBannerAds()
+        loadData()
 
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun loadData() {
         binding.apply {
 
 
@@ -116,6 +128,42 @@ class CoinDetailFragment : Fragment() {
                             .show()
                     }
                 }
+
+            }
+        }
+    }
+
+    private fun loadBannerAds() {
+        MobileAds.initialize(requireActivity().applicationContext) {}
+        adView = binding.adView
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
+        adView.adListener = object: AdListener() {
+            override fun onAdClicked() {
+               Toast.makeText(context,"AD LOADED",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+
+            override fun onAdFailedToLoad(adError : LoadAdError) {
+                // Code to be executed when an ad request fails.
+            }
+
+            override fun onAdImpression() {
+                // Code to be executed when an impression is recorded
+                // for an ad.
+            }
+
+            override fun onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            override fun onAdOpened() {
+                Toast.makeText(context,"Return the app .",Toast.LENGTH_SHORT).show()
 
             }
         }
