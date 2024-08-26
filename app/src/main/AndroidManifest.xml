@@ -18,6 +18,10 @@
         android:theme="@style/Theme.CryptoXCleanArchitecture"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7925100098336203~9595540257"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
