@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.recepguzel.cryptoxcleanarchitecture.R
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentCoinDetailBinding
@@ -117,14 +116,18 @@ class CoinDetailFragment : Fragment() {
                         Log.d("CoinDetailFragment", "Saving coin to favorites: ${args.argDetails}")
                         args.argDetails.isFav = true // Favori durumunu güncelle
                         coinListViewModel.saveCoin(args.argDetails)
-                        Toast.makeText(context, "Coin favorilere eklendi.", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, "Coin added to favorites.", Toast.LENGTH_SHORT)
                             .show()
 
                         // Favori ikonu güncelle
                         binding.favoriteIcon.setImageResource(R.drawable.star_fill)
                     } catch (e: Exception) {
                         Log.e("CoinDetailFragment", "Error adding coin to favorites", e)
-                        Toast.makeText(context, "Coin favorilere eklenemedi.", Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            context,
+                            "Coin could not be added to favorites.",
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                     }
                 }
@@ -142,24 +145,6 @@ class CoinDetailFragment : Fragment() {
         adView.adListener = object: AdListener() {
             override fun onAdClicked() {
                Toast.makeText(context,"AD LOADED",Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
-            }
-
-            override fun onAdFailedToLoad(adError : LoadAdError) {
-                // Code to be executed when an ad request fails.
-            }
-
-            override fun onAdImpression() {
-                // Code to be executed when an impression is recorded
-                // for an ad.
-            }
-
-            override fun onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
             }
 
             override fun onAdOpened() {

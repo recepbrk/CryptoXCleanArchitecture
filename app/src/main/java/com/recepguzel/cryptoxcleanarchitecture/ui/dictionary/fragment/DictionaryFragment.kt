@@ -4,6 +4,8 @@ import DictionaryAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,6 +15,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.recepguzel.cryptoxcleanarchitecture.data.model.CryptoTerm
@@ -24,6 +28,7 @@ class DictionaryFragment : Fragment() {
     private val viewModel: DictionaryViewModel by viewModels()
     private lateinit var adapter: DictionaryAdapter
     private var allCoins: List<CryptoTerm> = listOf()
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,29 +40,41 @@ class DictionaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = DictionaryAdapter()
-        binding.recyclerView.adapter = adapter
-        searchCoins()
-        viewModel.cryptoTermList.observe(viewLifecycleOwner) { terms ->
-            Log.d("DictionaryFragment", "Alınan terimler: $terms")
-            binding.progressBar.visibility = View.GONE
-            allCoins = terms // allCoins listesini güncelle
-            adapter.differ.submitList(terms)
-        }
+        initializeUI()
+        observeViewModel()
+        handleBackPress()
+    }
 
-        // ViewModel'de verileri yükle
+    private fun initializeUI() {
+        setupAdapter()
+        setupSearch()
         viewModel.loadCryptoTerms()
     }
 
+    private fun observeViewModel() {
+        viewModel.cryptoTermList.observe(viewLifecycleOwner) { terms ->
+            onCryptoTermsLoaded(terms)
+        }
+    }
+
+    private fun onCryptoTermsLoaded(terms: List<CryptoTerm>) {
+        Log.d("DictionaryFragment", "Alınan terimler: $terms")
+        binding.progressBar.visibility = View.GONE
+        allCoins = terms
+        adapter.differ.submitList(terms)
+    }
+
+    private fun setupAdapter() {
+        adapter = DictionaryAdapter()
+        binding.recyclerView.adapter = adapter
+    }
+
     @SuppressLint("ClickableViewAccessibility")
-    private fun searchCoins() {
+    private fun setupSearch() {
         binding.searchEditText.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
-                val drawableRight = (v as EditText).compoundDrawables[2]
-                if (drawableRight != null && event.rawX >= (v.right - drawableRight.bounds.width())) {
-                    // Close iconuna tıklandığında metni sil ve klavyeyi kapat
-                    v.text = null
-                    hideKeyboard(v)
+                if (isDrawableRightClicked(v as EditText, event)) {
+                    clearSearchField(v)
                     return@setOnTouchListener true
                 }
             }
@@ -75,16 +92,21 @@ class DictionaryFragment : Fragment() {
         })
     }
 
+    private fun isDrawableRightClicked(editText: EditText, event: MotionEvent): Boolean {
+        val drawableRight = editText.compoundDrawables[2]
+        return drawableRight != null && event.rawX >= (editText.right - drawableRight.bounds.width())
+    }
+
+    private fun clearSearchField(editText: EditText) {
+        editText.text = null
+        hideKeyboard(editText)
+    }
+
     private fun filterCoins(query: String?) {
         val filteredList = if (query.isNullOrEmpty()) {
             allCoins
         } else {
-            allCoins.filter {
-                it.term.contains(query, ignoreCase = true) || it.meaning.contains(
-                    query,
-                    ignoreCase = true
-                )
-            }
+            allCoins.filter { it.term.contains(query, ignoreCase = true) }
         }
         adapter.differ.submitList(filteredList)
     }
@@ -92,5 +114,31 @@ class DictionaryFragment : Fragment() {
     private fun hideKeyboard(view: View) {
         val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun handleBackPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (doubleBackToExitPressedOnce) {
+                        activity?.finish()
+                    } else {
+                        notifyUserToExit()
+                        resetDoubleBackPressFlagWithDelay()
+                    }
+                }
+            })
+    }
+
+    private fun notifyUserToExit() {
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(requireContext(), "Press back again to exit.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun resetDoubleBackPressFlagWithDelay() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            doubleBackToExitPressedOnce = false
+        }, 2000)
     }
 }

@@ -163,7 +163,7 @@ class SignUpFragment : Fragment() {
         val credentinal = GoogleAuthProvider.getCredential(account.idToken, null)
         firebaseAuth.signInWithCredential(credentinal).addOnCompleteListener {
             if (it.isSuccessful) {
-                findNavController().navigate(R.id.action_signUpFragment_to_homeFragment2)
+                findNavController().navigate(R.id.action_signUpFragment_to_splashFragment)
             } else {
                 Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
 
@@ -208,6 +208,4 @@ class SignUpFragment : Fragment() {
             }
         }
     }
-
-
 }

@@ -33,12 +33,12 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
 
-        if (firebaseAuth.currentUser != null && !isFirstRun) {
-            // Kullanıcı giriş yapmış ve bu ilk çalışma değilse ana ekrana yönlendir
-            navController.navigate(R.id.homeFragment)
-        } else {
-            // İlk çalışma ya da kullanıcı giriş yapmamışsa giriş ekranını göster
+        if (isFirstRun || firebaseAuth.currentUser == null) {
+            // Eğer ilk çalışma ise veya kullanıcı henüz giriş yapmamışsa giriş ekranına yönlendir
             navController.navigate(R.id.signInFragment)
+        } else {
+            // Kullanıcı giriş yapmış ve bu ilk çalışma değilse ana ekrana yönlendir
+            navController.navigate(R.id.splashFragment)
         }
 
         // İlk çalışmada bayrağı false yap

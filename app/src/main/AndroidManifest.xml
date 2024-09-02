@@ -39,9 +39,10 @@
             </intent-filter>
         </service>
 
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/notification" />
+            android:resource="@drawable/logo" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"

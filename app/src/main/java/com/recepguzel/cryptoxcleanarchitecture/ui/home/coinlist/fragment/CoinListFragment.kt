@@ -2,6 +2,8 @@ package com.recepguzel.cryptoxcleanarchitecture.ui.home.coinlist.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -11,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -29,6 +32,7 @@ class CoinListFragment : Fragment() {
     private val coinListViewModel: CoinListViewModel by viewModels()
     private lateinit var coinListAdapter: CoinListAdapter
     private var allCoins: List<CryptoData> = listOf()
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +44,13 @@ class CoinListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeUI()
+        initObserve()
+        searchCoins()
+        handleBackPress()
+    }
+
+    private fun initializeUI() {
         binding.swipeRefreshLayout.setColorSchemeResources(R.color.blue)
         binding.swipeRefreshLayout.setOnRefreshListener {
             coinListViewModel.fetchCoins()
@@ -47,10 +58,6 @@ class CoinListFragment : Fragment() {
         }
         coinListAdapter = CoinListAdapter()
         coinListViewModel.fetchCoins()
-        initObserve()
-        searchCoins()
-
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -136,6 +143,30 @@ class CoinListFragment : Fragment() {
         binding.coinlistRecyclerView.adapter = coinListAdapter
         binding.coinlistRecyclerView.setHasFixedSize(true)
         coinListAdapter.differ.submitList(coin)
+    }
+
+    private fun handleBackPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (doubleBackToExitPressedOnce) {
+                        activity?.finish() // Uygulamadan çık
+                    } else {
+                        doubleBackToExitPressedOnce = true
+                        Toast.makeText(
+                            requireContext(),
+                            "Press back again to exit.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            doubleBackToExitPressedOnce = false
+                        }, 2000) // 2 saniye bekleyip flag'i sıfırla
+                    }
+                }
+            })
+
     }
 
 }

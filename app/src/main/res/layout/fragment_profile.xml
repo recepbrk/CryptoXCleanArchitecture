@@ -31,7 +31,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="-100dp"
             android:fontFamily="@font/poppins_medium"
-            android:text="Recep Güzel"
+            android:text="Welcome CryptoX"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/imageView"

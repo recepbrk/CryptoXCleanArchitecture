@@ -4,11 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
 import com.recepguzel.cryptoxcleanarchitecture.R
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentFavoriteBinding
@@ -22,6 +27,8 @@ class FavoriteFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteBinding
     private val favoriteViewModel: FavoriteViewModel by viewModels()
     lateinit var favoriteAdapter: FavoriteAdapter
+    lateinit var adView: AdView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +42,25 @@ class FavoriteFragment : Fragment() {
         createRecyclerView()
         observeData()
         deleteFavoriteCoin()
+        loadBannerAds()
+    }
+
+    private fun loadBannerAds() {
+        MobileAds.initialize(requireActivity().applicationContext) {}
+        adView = binding.adView
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
+        adView.adListener = object : AdListener() {
+            override fun onAdClicked() {
+                Toast.makeText(context, "AD LOADED", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAdOpened() {
+                Toast.makeText(context, "Return the app .", Toast.LENGTH_SHORT).show()
+
+            }
+        }
     }
 
     private fun createRecyclerView() {

@@ -1,11 +1,14 @@
 package com.recepguzel.cryptoxcleanarchitecture.ui.news.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -30,8 +33,9 @@ class NewsFragment : Fragment() {
     private val newsViewModel: NewsViewModel by viewModels()
     private lateinit var newsAdapter: NewsAdapter
     private var mInterstitialAd: InterstitialAd? = null
-    private final val TAG = "NewsFragment"
+    private val TAG = "NewsFragment"
     private val args: NewsFragmentArgs by navArgs()
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,17 +48,42 @@ class NewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val category = args.category // Get the category from SafeArgs
-        Log.d("NewsFragment", "onViewCreated: Category received: $category")
-
         setupRecyclerView()
         observeData()
         loadInterAds()
+        handleBackPress()
+        initilazeVM()
 
+    }
+
+    private fun initilazeVM() {
+        val category = args.category // Get the category from SafeArgs
         category?.let {
             newsViewModel.getCryptoNews(it)
         }
+    }
+    private fun handleBackPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (doubleBackToExitPressedOnce) {
+                        activity?.finish() // Uygulamadan çık
+                    } else {
+                        doubleBackToExitPressedOnce = true
+                        Toast.makeText(
+                            requireContext(),
+                            "Press back again to exit.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            doubleBackToExitPressedOnce = false
+                        }, 2000) // 2 saniye bekleyip flag'i sıfırla
+                    }
+                }
+            })
+
     }
 
     private fun setupRecyclerView() {
@@ -83,17 +112,21 @@ class NewsFragment : Fragment() {
     private fun loadInterAds() {
         val adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(requireContext(), "ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.d(TAG, "Ad failed to load: ${adError.message}")
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            requireContext(),
+            "ca-app-pub-7925100098336203/2351373425",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d(TAG, "Ad failed to load: ${adError.message}")
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Log.d(TAG, "Ad was loaded.")
-                mInterstitialAd = interstitialAd
-            }
-        })
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d(TAG, "Ad was loaded.")
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun observeData() {
@@ -124,4 +157,6 @@ class NewsFragment : Fragment() {
         val action = NewsFragmentDirections.actionNewsFragmentToNewsDetailFragment(article)
         findNavController().navigate(action)
     }
+
+
 }

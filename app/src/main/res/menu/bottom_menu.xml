@@ -15,6 +15,6 @@
         android:icon="@drawable/news"/>
     <item
         android:id="@+id/profileFragment"
-        android:title="Profile"
-        android:icon="@drawable/profile"/>
+        android:title="Settings"
+        android:icon="@drawable/settings"/>
 </menu>

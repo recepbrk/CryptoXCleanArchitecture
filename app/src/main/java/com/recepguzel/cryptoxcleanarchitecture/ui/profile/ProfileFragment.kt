@@ -7,10 +7,14 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -28,7 +32,7 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
-    private val args: ProfileFragmentArgs by navArgs()
+    private var doubleBackToExitPressedOnce = false
 
     companion object {
         private const val TAG = "ProfileFragment"
@@ -40,29 +44,19 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d(TAG, "onCreateView: Fragment oluşturuluyor")
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: Fragment görünümleri oluşturuldu")
-
-
-        binding.cardViewResetPassword.setOnClickListener {
-            val action=ProfileFragmentDirections.actionProfileFragmentToForgotPasswordFragment()
-            findNavController().navigate(action)
-        }
-        binding.cardLogOut.setOnClickListener {
-            showLogoutDialog()
-        }
-        binding.userName.text = args.name
-
-
+        setupLaunchers()
+        setupUIActions()
         loadImageFromSharedPreferences()
+        handleBackPress()
+    }
 
-        // İzin talebi sonuçlarını dinlemek için launcher tanımlama
+    private fun setupLaunchers() {
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -73,49 +67,68 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        // Galeri seçim işlemini dinlemek için launcher tanımlama
         galleryLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val selectedImageUri = result.data?.data
-                if (selectedImageUri != null) {
-                    val imagePath = saveImageToInternalStorage(selectedImageUri)
-                    if (imagePath != null) {
-                        binding.uploadImage.setImageURI(Uri.parse(imagePath))
-                        saveImagePathToSharedPreferences(imagePath)
-                    }
-                }
-            }
-        }
-
-        binding.uploadImage.setOnClickListener {
-            Log.d(TAG, "uploadImage tıklandı")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // Android 10 (API 29) ve sonrası için izin gerekmez
-                openGallery()
-            } else {
-                // Android 10 öncesi için izin kontrolü yapın
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    Log.d(TAG, "İzin talebi yapılıyor")
-                    permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                } else {
-                    openGallery()
+                selectedImageUri?.let {
+                    handleImageSelection(it)
                 }
             }
         }
     }
 
+    private fun setupUIActions() {
+        binding.uploadImage.setOnClickListener {
+            handleImageUploadClick()
+        }
+
+        binding.cardLogOut.setOnClickListener {
+            showLogoutDialog()
+        }
+
+        binding.cardViewResetPassword.setOnClickListener {
+            navigateToResetPassword()
+        }
+    }
+
+    private fun handleImageUploadClick() {
+        Log.d(TAG, "uploadImage clicked")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            openGallery()
+        } else {
+            checkStoragePermission()
+        }
+    }
+
+    private fun checkStoragePermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d(TAG, "Requesting permission")
+            permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        } else {
+            openGallery()
+        }
+    }
+
     private fun openGallery() {
-        Log.d(TAG, "openGallery: Galeri açılıyor")
+        Log.d(TAG, "Opening gallery")
         val intent = Intent(Intent.ACTION_PICK).apply {
             type = "image/*"
         }
         galleryLauncher.launch(intent)
+    }
+
+    private fun handleImageSelection(uri: Uri) {
+        val imagePath = saveImageToInternalStorage(uri)
+        if (imagePath != null) {
+            binding.uploadImage.setImageURI(Uri.parse(imagePath))
+            saveImagePathToSharedPreferences(imagePath)
+        }
     }
 
     private fun saveImageToInternalStorage(uri: Uri): String? {
@@ -135,67 +148,85 @@ class ProfileFragment : Fragment() {
 
     private fun saveImagePathToSharedPreferences(imagePath: String) {
         val sharedPreferences = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString(IMAGE_PATH_KEY, imagePath)
-        editor.apply()
+        sharedPreferences.edit().apply {
+            putString(IMAGE_PATH_KEY, imagePath)
+            apply()
+        }
     }
 
     private fun loadImageFromSharedPreferences() {
         val sharedPreferences = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val imagePath = sharedPreferences.getString(IMAGE_PATH_KEY, null)
-        if (imagePath != null) {
-            val file = File(imagePath)
+        imagePath?.let {
+            val file = File(it)
             if (file.exists()) {
                 binding.uploadImage.setImageURI(Uri.fromFile(file))
             } else {
-                Log.d(TAG, "loadImageFromSharedPreferences: Kaydedilmiş resim dosyası bulunamadı.")
+                Log.d(TAG, "No saved image file found.")
             }
-        } else {
-            Log.d(TAG, "loadImageFromSharedPreferences: Kaydedilmiş resim yok.")
-        }
+        } ?: Log.d(TAG, "No saved image.")
     }
 
     private fun showPermissionDeniedDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("Storage Permission Required")
             .setMessage("You cannot select images from the gallery as storage permission is not granted. Please grant permission manually from settings.")
-            .setPositiveButton("Tamam") { dialog, _ ->
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton("Settings") { dialog, _ ->
                 dialog.dismiss()
-            }
-            .setNegativeButton("Ayarlar") { dialog, _ ->
-                dialog.dismiss()
-                val intent =
-                    Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                        data = Uri.fromParts("package", requireContext().packageName, null)
-                    }
-                startActivity(intent)
+                openAppSettings()
             }
             .show()
     }
 
+    private fun openAppSettings() {
+        val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", requireContext().packageName, null)
+        }
+        startActivity(intent)
+    }
+
     private fun showLogoutDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Log Out ?")
-        builder.setMessage("Are you sure you want to log out?")
-
-
-        builder.setPositiveButton("Yes") { dialog, _ ->
-            dialog.dismiss()
-            logout()
-        }
-
-
-        builder.setNegativeButton("No") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-
-        builder.show()
+        AlertDialog.Builder(requireContext())
+            .setTitle("Log Out?")
+            .setMessage("Are you sure you want to log out?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                dialog.dismiss()
+                logout()
+            }
+            .setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     private fun logout() {
-
         requireActivity().finish()
     }
-}
 
+    private fun navigateToResetPassword() {
+        val action = ProfileFragmentDirections.actionProfileFragmentToForgotPasswordFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun handleBackPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (doubleBackToExitPressedOnce) {
+                        activity?.finish()
+                    } else {
+                        doubleBackToExitPressedOnce = true
+                        Toast.makeText(
+                            requireContext(),
+                            "Press back again to exit.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            doubleBackToExitPressedOnce = false
+                        }, 2000)
+                    }
+                }
+            })
+    }
+}
