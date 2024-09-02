@@ -7,5 +7,5 @@ object Constants {
     const val NETWORK_TIMEOUT = 60L
     const val DATABASE_NAME = "coin_database"
     const val BASE_URL_NEWS = "https://newsapi.org"
-    const val NEWS_API_KEY = "b92edbc603954546885a88b26517acee"
+    const val NEWS_API_KEY = "API_KEY_NEWS"
 }
