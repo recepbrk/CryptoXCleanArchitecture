@@ -1,4 +1,4 @@
-package com.recepguzel.cryptoxcleanarchitecture.ui.news.fragment
+package com.recepguzel.cryptoxcleanarchitecture.ui.news
 
 import android.os.Bundle
 import android.os.Handler
@@ -12,11 +12,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.recepguzel.cryptoxcleanarchitecture.data.model.NewsResponse
@@ -34,16 +30,25 @@ class NewsFragment : Fragment() {
     private lateinit var newsAdapter: NewsAdapter
     private var mInterstitialAd: InterstitialAd? = null
     private val TAG = "NewsFragment"
-    private val args: NewsFragmentArgs by navArgs()
     private var doubleBackToExitPressedOnce = false
+    private var category: String? = null
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("NewsFragment", "onCreateView: Inflating FragmentNewsBinding")
+        Log.d(TAG, "onCreateView: Inflating FragmentABinding")
         binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            category = it.getString("category")
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,23 +57,24 @@ class NewsFragment : Fragment() {
         observeData()
         loadInterAds()
         handleBackPress()
-        initilazeVM()
-
+        initializeViewModel()
     }
 
-    private fun initilazeVM() {
-        val category = args.category // Get the category from SafeArgs
+
+
+    private fun initializeViewModel() {
         category?.let {
             newsViewModel.getCryptoNews(it)
-        }
+        } ?: Log.e(TAG, "Category is null, cannot fetch news.")
     }
+
     private fun handleBackPress() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (doubleBackToExitPressedOnce) {
-                        activity?.finish() // Uygulamadan çık
+                        activity?.finish() // Exit the application
                     } else {
                         doubleBackToExitPressedOnce = true
                         Toast.makeText(
@@ -79,17 +85,16 @@ class NewsFragment : Fragment() {
 
                         Handler(Looper.getMainLooper()).postDelayed({
                             doubleBackToExitPressedOnce = false
-                        }, 2000) // 2 saniye bekleyip flag'i sıfırla
+                        }, 2000) // Reset flag after 2 seconds
                     }
                 }
             })
-
     }
 
     private fun setupRecyclerView() {
         newsAdapter = NewsAdapter()
         binding.newsRecyclerview.adapter = newsAdapter
-        Log.d("NewsFragment", "setupRecyclerView: RecyclerView initialized")
+        Log.d(TAG, "setupRecyclerView: RecyclerView initialized")
 
         newsAdapter.OnItemClickListener { article ->
             if (mInterstitialAd != null) {
@@ -111,7 +116,6 @@ class NewsFragment : Fragment() {
 
     private fun loadInterAds() {
         val adRequest = AdRequest.Builder().build()
-
         InterstitialAd.load(
             requireContext(),
             "ca-app-pub-7925100098336203/2351373425",
@@ -133,18 +137,18 @@ class NewsFragment : Fragment() {
         newsViewModel.searchNews.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    Log.d("NewsFragment", "observeData: Data loaded successfully")
+                    Log.d(TAG, "observeData: Data loaded successfully")
                     newsAdapter.differ.submitList(resource.data?.articles)
                     binding.newsProgress.visibility = View.GONE
                 }
 
                 is Resource.Loading -> {
-                    Log.d("NewsFragment", "observeData: Data loading in progress")
+                    Log.d(TAG, "observeData: Data loading in progress")
                     binding.newsProgress.visibility = View.VISIBLE
                 }
 
                 is Resource.Error -> {
-                    Log.e("NewsFragment", "observeData: Error occurred - ${resource.message}")
+                    Log.e(TAG, "observeData: Error occurred - ${resource.message}")
                     binding.newsProgress.visibility = View.GONE
                     Toast.makeText(context, resource.message, Toast.LENGTH_SHORT).show()
                 }
@@ -153,10 +157,8 @@ class NewsFragment : Fragment() {
     }
 
     private fun navigateToNewsDetail(article: NewsResponse.Article) {
-        Log.d("NewsFragment", "navigateToNewsDetail: Navigating to details")
-        val action = NewsFragmentDirections.actionNewsFragmentToNewsDetailFragment(article)
+        Log.d(TAG, "navigateToNewsDetail: Navigating to details")
+        val action = NewsFragmentDirections.actionAFragmentToNewsDetailFragment(article)
         findNavController().navigate(action)
     }
-
-
 }
