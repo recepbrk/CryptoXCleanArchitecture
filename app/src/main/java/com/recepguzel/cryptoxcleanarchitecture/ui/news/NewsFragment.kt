@@ -48,8 +48,11 @@ class NewsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             category = it.getString("category")
+            Log.d("CryptoNewsFragment", "onCreate: Category received: $category")
         }
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

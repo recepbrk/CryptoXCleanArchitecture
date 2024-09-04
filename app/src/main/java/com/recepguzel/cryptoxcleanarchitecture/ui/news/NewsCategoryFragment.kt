@@ -1,30 +1,28 @@
 package com.recepguzel.cryptoxcleanarchitecture.ui.news
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentNewsCategoryBinding
-import com.recepguzel.cryptoxcleanarchitecture.ui.home.FragmentAdapter
 
 
-
-class NewsCategoryFragment : Fragment() {
-
+class NewsCategoryFragment : androidx.fragment.app.Fragment() {
     private lateinit var binding: FragmentNewsCategoryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = FragmentNewsCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fragmentAdapter = FragmentAdapter(childFragmentManager)
+        val fragmentAdapter = NewsFragmentAdapter(childFragmentManager)
         fragmentAdapter.addFragment(NewsFragment().apply {
             arguments = createBundle("Bitcoin")
         }, "Bitcoin")
@@ -58,5 +56,3 @@ class NewsCategoryFragment : Fragment() {
         return bundle
     }
 }
-
-
