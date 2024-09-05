@@ -30,11 +30,10 @@ class SignInFragment : Fragment() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private var isPasswordVisible = false
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -56,7 +55,7 @@ class SignInFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun passwordVisible() {
         binding.signInPassword.setOnTouchListener { _, event ->
-            val drawableEnd = 2 // drawableEnd için indeks
+            val drawableEnd = 2 // DrawableEnd için indeks
             if (event.action == MotionEvent.ACTION_UP) {
                 if (event.rawX >= (binding.signInPassword.right - binding.signInPassword.compoundDrawables[drawableEnd].bounds.width())) {
                     togglePasswordVisibility(binding.signInPassword)
@@ -72,41 +71,24 @@ class SignInFragment : Fragment() {
         val textSize = editText.textSize
 
         if (isPasswordVisible) {
-            // Şifreyi gizle
-            editText.inputType =
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            editText.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                0,
-                0,
-                R.drawable.password_visibility,
-                0
-            )
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            editText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.password_visibility, 0)
         } else {
-            // Şifreyi göster
-            editText.inputType =
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            editText.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                0,
-                0,
-                R.drawable.show_password,
-                0
-            )
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            editText.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.show_password, 0)
         }
 
-        // Yazı tipini ve boyutunu tekrar uygula
         editText.typeface = typeface
         editText.textSize = textSize / resources.displayMetrics.scaledDensity
-
-        // İmleci sona taşı
         editText.setSelection(editText.text?.length ?: 0)
         isPasswordVisible = !isPasswordVisible
-
     }
 
     private fun googleAuth() {
         firebaseAuth = FirebaseAuth.getInstance()
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.client_id))
+            .requestIdToken(getString(R.string.client_id)) // Ensure this is the correct Client ID
             .requestEmail()
             .build()
 
@@ -127,11 +109,11 @@ class SignInFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 handleResult(task)
+            } else {
+                Toast.makeText(context, "Google Sign-in failed", Toast.LENGTH_SHORT).show()
             }
-
         }
 
-    @SuppressLint("SuspiciousIndentation")
     private fun handleResult(task: Task<GoogleSignInAccount>) {
         if (task.isSuccessful) {
             val account: GoogleSignInAccount? = task.result
@@ -139,23 +121,20 @@ class SignInFragment : Fragment() {
                 updateUI(account)
             }
         } else {
-            Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun updateUI(account: GoogleSignInAccount) {
-        val credentinal = GoogleAuthProvider.getCredential(account.idToken, null)
-        firebaseAuth.signInWithCredential(credentinal).addOnCompleteListener {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 findNavController().navigate(R.id.action_signInFragment_to_splashFragment)
-
             } else {
-                Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
-
+                Toast.makeText(context, "Error: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 
     private fun loginOperation() {
         firebaseAuth = FirebaseAuth.getInstance()
@@ -168,31 +147,17 @@ class SignInFragment : Fragment() {
             val password = binding.signInPassword.text.toString()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
-                            val action =
-                                SignInFragmentDirections.actionSignInFragmentToSplashFragment()
-                            findNavController().navigate(action)
-
-                        } else
-                            Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT)
-                                .show()
-
+                            findNavController().navigate(R.id.action_signInFragment_to_splashFragment)
+                        } else {
+                            Toast.makeText(context, "Error: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
+                        }
                     }
             } else {
-                Toast.makeText(context, "Passwoord is not matching", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Email and password must not be empty", Toast.LENGTH_SHORT).show()
             }
-
         }
-
     }
-
 }
-
-
-
-
-
-
