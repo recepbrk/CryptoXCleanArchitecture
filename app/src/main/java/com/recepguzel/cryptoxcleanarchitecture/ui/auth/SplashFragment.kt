@@ -1,4 +1,4 @@
-package com.recepguzel.cryptoxcleanarchitecture
+package com.recepguzel.cryptoxcleanarchitecture.ui.auth
 
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.recepguzel.cryptoxcleanarchitecture.R
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentSplashBinding
 
 

@@ -98,7 +98,7 @@
         tools:layout="@layout/fragment_forgot_password" />
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.recepguzel.cryptoxcleanarchitecture.SplashFragment"
+        android:name="com.recepguzel.cryptoxcleanarchitecture.ui.auth.SplashFragment"
         android:label="SplashFragment" >
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
