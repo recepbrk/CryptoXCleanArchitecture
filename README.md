@@ -53,7 +53,6 @@ CryptoX is a comprehensive mobile application designed to provide users with rea
     - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle) - Dispose of observing data when lifecycle state changes.
     - [Fragment-ktx](https://developer.android.com/kotlin/ktx#fragment) - A set of Kotlin extensions that helps with fragment lifecycle.
     - [View Binding](https://developer.android.com/topic/libraries/view-binding) - Allows you to more easily write code that interacts with views
-    - [Data Binding](https://developer.android.com/topic/libraries/data-binding?hl=en) - Data Binding is the process of binding data to a layout xml file.
     - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - UI related data holder, lifecycle aware.
     - [Swiperefreshlayout](https://developer.android.com/jetpack/androidx/releases/swiperefreshlayout) - SwipeRefreshLayout is an Android component that allows users to refresh content by pulling down on the screen.
 - [Firebase](https://firebase.google.com/)
