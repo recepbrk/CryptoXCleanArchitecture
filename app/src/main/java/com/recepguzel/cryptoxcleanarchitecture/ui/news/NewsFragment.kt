@@ -12,7 +12,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.recepguzel.cryptoxcleanarchitecture.data.model.NewsResponse
@@ -31,10 +34,6 @@ class NewsFragment : Fragment() {
     private var mInterstitialAd: InterstitialAd? = null
     private val TAG = "NewsFragment"
     private var doubleBackToExitPressedOnce = false
-    private var category: String? = null
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,16 +42,6 @@ class NewsFragment : Fragment() {
         binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            category = it.getString("category")
-            Log.d("CryptoNewsFragment", "onCreate: Category received: $category")
-        }
-    }
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,12 +52,10 @@ class NewsFragment : Fragment() {
         initializeViewModel()
     }
 
-
-
     private fun initializeViewModel() {
-        category?.let {
-            newsViewModel.getCryptoNews(it)
-        } ?: Log.e(TAG, "Category is null, cannot fetch news.")
+
+        newsViewModel.getCryptoNews("Bitcoin")
+
     }
 
     private fun handleBackPress() {

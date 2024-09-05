@@ -107,13 +107,10 @@
     <fragment
         android:id="@+id/newsFragment"
         android:name="com.recepguzel.cryptoxcleanarchitecture.ui.news.NewsFragment"
-        android:label="AFragment" >
+        android:label="NewsFragment" >
         <action
             android:id="@+id/action_AFragment_to_newsDetailFragment"
             app:destination="@id/newsDetailFragment" />
+
     </fragment>
-    <fragment
-        android:id="@+id/newsCategoryFragment"
-        android:name="com.recepguzel.cryptoxcleanarchitecture.ui.news.NewsCategoryFragment"
-        android:label="NewsCategoryFragment" />
 </navigation>

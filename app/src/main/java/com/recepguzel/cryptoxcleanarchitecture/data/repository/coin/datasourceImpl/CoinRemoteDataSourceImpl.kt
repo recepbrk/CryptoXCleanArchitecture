@@ -16,7 +16,7 @@ class CoinRemoteDataSourceImpl @Inject constructor(
             val limit = 200
             val response = coinNetworkService.getCoinList(start, limit)
 
-            // Convert CoinResponse to Resource<List<CryptoData>>
+
             val cryptoDataList = response.data.cryptoCurrencyList
             Resource.Success(cryptoDataList)
         } catch (e: Exception) {

@@ -8,17 +8,16 @@ import javax.inject.Inject
 class GetCoinsUseCase @Inject constructor(private val coinRepository: CoinRepository) {
 
 
-    // Get Coins Use Case
     suspend fun getCoins(): Resource<List<CryptoData>> {
         return coinRepository.getCoins()
     }
 
-    // Save Coin Use Case
+
     suspend fun saveCoin(coin: CryptoData): Long {
         return coinRepository.saveCoin(coin)
     }
 
-    // Delete Coin Use Case
+
     suspend fun deleteCoin(coin: CryptoData) {
         coinRepository.deleteCoin(coin)
     }

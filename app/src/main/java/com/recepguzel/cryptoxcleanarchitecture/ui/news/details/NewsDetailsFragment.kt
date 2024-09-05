@@ -3,11 +3,11 @@ package com.recepguzel.cryptoxcleanarchitecture.ui.news.details
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.recepguzel.cryptoxcleanarchitecture.databinding.FragmentNewsDetailsBinding
@@ -22,7 +22,7 @@ class NewsDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding= FragmentNewsDetailsBinding.inflate(inflater,container,false)
+        binding = FragmentNewsDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

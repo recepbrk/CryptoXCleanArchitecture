@@ -46,8 +46,6 @@ class SignUpFragment : Fragment() {
         signUpOperation()
         googleAuth()
         passwordVisible()
-
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
